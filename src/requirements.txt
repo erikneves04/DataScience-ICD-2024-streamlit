@@ -4,5 +4,5 @@ pandas
 matplotlib
 numpy
 seaborn
+statsmodels
 sklearn
-warnings

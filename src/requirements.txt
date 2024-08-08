@@ -2,3 +2,6 @@
 snowflake-connector-python
 pandas                                                      
 streamlit_option_menu                                             
+matplotlib
+numpy
+seaborn

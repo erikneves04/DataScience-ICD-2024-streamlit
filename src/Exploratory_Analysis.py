@@ -3,14 +3,14 @@ import matplotlib
 from matplotlib import pyplot as plt
 import numpy as np
 import seaborn as sns
-import utils
+from utils import PlotJustifyText, PlotGraph, LoadDatabases
 sns.set_theme()
 
 #Setando o tamanho padrão das figuras
 matplotlib.rcParams['figure.figsize'] = (15.0, 9.0)
 
 # Acessos aos dados
-kindle_data, books = utils.LoadDatabases()
+kindle_data, books = LoadDatabases()
 
 def Topics():
     return [
@@ -18,7 +18,7 @@ def Topics():
     ]
 
 def AE1():
-    utils.PlotJustifyText("Nesse tópico buscamos avaliar se existe uma relação entre o preço de um livro e suas avaliação média. Para realizar essa análise vamos nos basear na média de preços e em um arredondamento das avaliações(que serão agrupadas de 0 a 5 e com seus decimais intermediários -- 0.5). Além disso serão exibidos dois cenários, um com os dados originais e outro com 95% dos dados, visando reduzir a influência de dados extremos e fora do normal(outliers) na visualização.")
+    PlotJustifyText("Nesse tópico buscamos avaliar se existe uma relação entre o preço de um livro e suas avaliação média. Para realizar essa análise vamos nos basear na média de preços e em um arredondamento das avaliações(que serão agrupadas de 0 a 5 e com seus decimais intermediários -- 0.5). Além disso serão exibidos dois cenários, um com os dados originais e outro com 95% dos dados, visando reduzir a influência de dados extremos e fora do normal(outliers) na visualização.")
     
     # Adicionando uma nova coluna 'RoundedStars' para arredondar as estrelas para o meio mais próximo
     decimal_values = np.modf(kindle_data['Stars'])[0]
@@ -53,4 +53,4 @@ def AE1():
     axs[1].set_title('Preço Médio vs. Avaliação (sem Outliers)', fontsize=16)
     axs[1].tick_params(axis='both', which='major', labelsize=12)
 
-    utils.PlotGraph(plt)
+    PlotGraph(plt)

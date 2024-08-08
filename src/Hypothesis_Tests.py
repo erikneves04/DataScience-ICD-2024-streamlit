@@ -21,7 +21,8 @@ def Topics():
     ]
 
 def HT1():
-    PlotMarkdown("<b>Hipótese nula:</b> Não há diferença significativa nas avaliações dos livros com base no autor. Ou seja, as avaliações atribuídas aos livros não são influenciadas pelo autor que os escreveu.< /br><b>Hipótese alternativa:</b> Existe uma diferença significativa nas avaliações dos livros com base no autor. Ou seja, o autor influencia as avaliações atribuídas aos livros.")
+    PlotMarkdown("<b>Hipótese nula:</b> Não há diferença significativa nas avaliações dos livros com base no autor. Ou seja, as avaliações atribuídas aos livros não são influenciadas pelo autor que os escreveu.")
+    PlotMarkdown("<b>Hipótese alternativa:</b> Existe uma diferença significativa nas avaliações dos livros com base no autor. Ou seja, o autor influencia as avaliações atribuídas aos livros.")
 
     # Cálculo da Estatística Observada
     group_means = kindle_data.groupby('Authors')['Stars'].mean()
@@ -68,7 +69,8 @@ def HT1():
     PlotJustifyText("A estatística observada de 53926,66 é significativamente maior do que o intervalo de confiança bootstrap (aproximadamente, 2960 a 3860), indicando que a variância entre as médias das avaliações dos autores não é atribuída ao acaso. O método bootstrap permite rejeitar a hipótese nula com alta confiança. Esse resultado sugere que fatores como estilo de escrita e engajamento com os leitores fazem com que autores bem avaliados escrevam livros que consistentemente agradam ao público.")
 
 def HT2():
-    PlotMarkdown("<b>Hipótese nula:</b> Não há relação significativa entre o preço e a avaliação dos livros. Ou seja, o preço não influencia as avaliações atribuídas pelos leitores.< /br><b>Hipótese alternativa:</b> Existe uma relação significativa entre o preço e a avaliação dos livros. Ou seja, o preço influencia as avaliações atribuídas pelos leitores.")
+    PlotMarkdown("<b>Hipótese nula:</b> Não há relação significativa entre o preço e a avaliação dos livros. Ou seja, o preço não influencia as avaliações atribuídas pelos leitores.")
+    PlotMarkdown("<b>Hipótese alternativa:</b> Existe uma relação significativa entre o preço e a avaliação dos livros. Ou seja, o preço influencia as avaliações atribuídas pelos leitores.")
 
     observed_stat = np.corrcoef(kindle_data['Price'], kindle_data['Stars'])[0, 1]
 

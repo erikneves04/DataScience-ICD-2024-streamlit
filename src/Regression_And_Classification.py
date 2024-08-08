@@ -1,4 +1,4 @@
-from utils import PlotJustifyText, PlotGraph, LoadDatabases
+from utils import PlotJustifyText, PlotGraph, LoadDatabases, PlotMarkdown
 
 import pandas as pd
 import matplotlib
@@ -97,6 +97,6 @@ def RC2():
     PlotJustifyText(f'Accuracy: {accuracy:.4f}')
     
     # Exibir o relatório de classificação formatado
-    st.markdown(f"### Classification Report\n\n{report}")
+    PlotMarkdown(f"### Classification Report\n\n{report}")
 
     PlotJustifyText("O modelo de Random Forest alcançou uma alta acurácia de 94%, indicando um bom desempenho geral. No entanto, ao analisar as métricas detalhadas, percebe-se que o modelo tem um desempenho significativamente melhor em prever avaliações altas (classe 1) com uma precisão de 96% e recall de 99%, enquanto o desempenho na classe de avaliações baixas (classe 0) é limitado, com uma precisão de 51% e recall de 24%. Isso sugere um desequilíbrio na capacidade do modelo de prever diferentes classes, possivelmente devido a um desbalanceamento nos dados.")

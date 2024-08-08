@@ -7,9 +7,11 @@ def PlotTitle(title: str):
 def PlotJustifyText(text: str):
   st.markdown(f"<p style='text-align: justify; color: white;'>{text}</p>", unsafe_allow_html=True)
 
-
 def PlotGraph(plt):
     st.pyplot(plt)
+
+def PlotMarkdown(text: str):
+    st.markdown(text)
 
 def LoadDatabases():
     kindle_data = pd.read_csv('databases/kindle_data_clean.csv')

@@ -91,7 +91,12 @@ def RC2():
     # 5. Avaliação do Modelo
     y_pred = clf.predict(X_test)
 
-    PlotJustifyText(f'Accuracy: {accuracy_score(y_test, y_pred):.4f}')
-    PlotJustifyText(classification_report(y_test, y_pred))
+    accuracy = accuracy_score(y_test, y_pred)
+    report = classification_report(y_test, y_pred)
+
+    PlotJustifyText(f'Accuracy: {accuracy:.4f}')
+    
+    # Exibir o relatório de classificação formatado
+    st.markdown(f"### Classification Report\n\n{report}")
 
     PlotJustifyText("O modelo de Random Forest alcançou uma alta acurácia de 94%, indicando um bom desempenho geral. No entanto, ao analisar as métricas detalhadas, percebe-se que o modelo tem um desempenho significativamente melhor em prever avaliações altas (classe 1) com uma precisão de 96% e recall de 99%, enquanto o desempenho na classe de avaliações baixas (classe 0) é limitado, com uma precisão de 51% e recall de 24%. Isso sugere um desequilíbrio na capacidade do modelo de prever diferentes classes, possivelmente devido a um desbalanceamento nos dados.")

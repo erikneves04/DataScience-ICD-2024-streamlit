@@ -8,12 +8,12 @@ def PlotJustifyText(text: str):
   st.markdown(f"<p style='text-align: justify; color: white;'>{text}</p>", unsafe_allow_html=True)
 
 def PlotGraph(plt):
-    st.pyplot(plt)
+  st.pyplot(plt)
 
 def PlotMarkdown(text: str):
-    st.markdown(text)
+  st.markdown(text)
 
 def LoadDatabases():
-    kindle_data = pd.read_csv('databases/kindle_data_clean.csv')
-    books = pd.read_csv('databases/goodreads_basic_info_2.csv')
-    return kindle_data, books
+  kindle_data = pd.read_csv('databases/kindle_data_clean.csv')
+  books = pd.read_csv('databases/goodreads_basic_info_2.csv')
+  return kindle_data, books

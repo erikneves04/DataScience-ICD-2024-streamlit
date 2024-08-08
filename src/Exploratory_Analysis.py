@@ -54,3 +54,4 @@ def AE1():
     axs[1].tick_params(axis='both', which='major', labelsize=12)
 
     PlotGraph(plt)
+    PlotJustifyText("De acordo com os gráficos acima não temos nenhuma indicação de que exista uma relação entre essas duas variáveis, sendo assim, será necessário partir para uma segunda análise. Na segunda etapa, que será abordada em outro notebook, buscamos quebrar a associação entre preço e avaliação aplicando um teste de permutação em amostras reduzidas dos dados.")

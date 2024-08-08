@@ -1,9 +1,10 @@
+from utils import PlotJustifyText, PlotGraph, LoadDatabases
+
 import pandas as pd
 import matplotlib
 from matplotlib import pyplot as plt
 import numpy as np
 import seaborn as sns
-from utils import PlotJustifyText, PlotGraph, LoadDatabases
 sns.set_theme()
 
 #Setando o tamanho padrão das figuras
@@ -15,6 +16,7 @@ kindle_data, books = LoadDatabases()
 def Topics():
     return [
         ('Preços x Avaliações', AE1),
+        ('Autores x Avaliações', AE2),
     ]
 
 def AE1():
@@ -55,3 +57,37 @@ def AE1():
 
     PlotGraph(plt)
     PlotJustifyText("De acordo com os gráficos acima não temos nenhuma indicação de que exista uma relação entre essas duas variáveis, sendo assim, será necessário partir para uma segunda análise. Na segunda etapa, que será abordada em outro notebook, buscamos quebrar a associação entre preço e avaliação aplicando um teste de permutação em amostras reduzidas dos dados.")
+
+def AE2():
+    PlotJustifyText("Neste tópico buscamos avaliar se existe uma relação entre o número de publicações de um autor e sua avaliação média. Para realizar essa análise, vamos nos basear na média do número de publicações e em um arredondamento das avaliações que fizemos anteriormente.")
+
+    # Calculando o número de publicações por autor
+    publications_per_author = kindle_data['Authors'].value_counts().reset_index()
+    publications_per_author.columns = ['Authors', 'Publications']
+
+    # Calculando a média das avaliações por autor
+    average_stars_per_author = kindle_data.groupby('Authors')['RoundedStars'].mean().reset_index()
+
+    # Combinando os dados de publicações e avaliações
+    author_stats = pd.merge(publications_per_author, average_stars_per_author, on='Authors')
+
+    fig, axs = plt.subplots(1, 2, figsize=(18, 6), gridspec_kw={'width_ratios': [2, 2]})
+
+    # Gráfico de dispersão
+    sns.scatterplot(x='RoundedStars', y='Publications', data=author_stats, ax=axs[0], alpha=0.5, color='b')
+    axs[0].set_xlabel('Avaliação Média', fontsize=14)
+    axs[0].set_ylabel('Número de Publicações', fontsize=14)
+    axs[0].set_title('Número de Publicações vs. Avaliação Média', fontsize=16)
+    axs[0].tick_params(axis='both', which='major', labelsize=12)
+
+    # Histograma das avaliações médias
+    sns.histplot(author_stats['RoundedStars'], bins=np.arange(0, 5.5, 0.5), ax=axs[1], alpha=0.7, color='b', edgecolor='black')
+    axs[1].set_xlabel('Avaliação Média', fontsize=14)
+    axs[1].set_ylabel('Frequência', fontsize=14)
+    axs[1].set_title('Distribuição das Avaliações Médias', fontsize=16)
+    axs[1].tick_params(axis='both', which='major', labelsize=12)
+
+    plt.tight_layout()
+    PlotGraph(plt)
+
+    PlotJustifyText("Esse resultado pode ser explicado pelo fato de que avaliações no geral tendem a ser boas, refletindo uma tendência positiva dos leitores ao avaliar livros. Além disso, novos autores com poucas publicações podem lançar obras de alta qualidade que recebem grande apreciação do público, ou podem ter uma base de leitores inicial que é particularmente entusiasta e generosa nas avaliações.")

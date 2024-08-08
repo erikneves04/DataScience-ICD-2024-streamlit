@@ -51,7 +51,8 @@ def HT1():
     conf_interval = np.percentile(bootstrap_stats, [2.5, 97.5])
 
     # Impressão dos resultados
-    PlotJustifyText(f'Estatística Observada: {between_group_variance:.3f}\nIntervalo de Confiança de 95%: [{conf_interval[0]:.3f}, {conf_interval[1]:.3f}]')
+    PlotJustifyText(f'Estatística Observada: {between_group_variance:.3f}')
+    PlotMarkdown(f'Intervalo de Confiança de 95%: [{conf_interval[0]:.3f}, {conf_interval[1]:.3f}]')
 
     # Plotar os resultados
     sns.histplot(bootstrap_stats, bins=30, alpha=0.7)

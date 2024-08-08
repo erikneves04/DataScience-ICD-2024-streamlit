@@ -32,6 +32,7 @@ def Topics():
     ]
 
 def RC1():
+    global kindle_data
     PlotJustifyText("Nesta seção, exploramos a relação entre os autores e as avaliações atribuídas às suas obras. O objetivo é investigar se é possível inferir a avaliação de um livro com base no autor que o escreveu. Analisamos se a reputação ou estilo característico de cada autor influencia significativamente a percepção dos leitores, refletida nas avaliações recebidas.")
     
     autor_aval_media = kindle_data.groupby('Authors')['Stars'].mean().reset_index()
@@ -60,6 +61,7 @@ def RC1():
     PlotJustifyText("O modelo mostrou-se eficaz na predição das avaliações dos livros, explicando 83,86% da variância (R2) e apresentando um erro quadrático médio (MSE) de 0,0896. Esses resultados indicam que o modelo consegue prever as avaliações com precisão, justificando sua adequação para este tipo de análise.")
 
 def RC2():
+    global kindle_data
     PlotJustifyText("Para inferir se um livro terá uma avaliação alta (4 ou mais estrelas), treinamos um modelo de classificação usando variáveis como preço, número de avaliações, editora e categoria. Inicialmente tratamos e dividimos os dados em conjuntos de treino e teste e, na sequência, ajustamos o modelo com Random Forest.")
 
     # 1. Definir do problema

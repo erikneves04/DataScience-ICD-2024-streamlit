@@ -1,8 +1,5 @@
 import streamlit as st
 import pandas as pd
-import snowflake.connector
-import streamlit_option_menu
-from streamlit_option_menu import option_menu
 
 def PlotTitle(title: str):
   st.markdown(f"<h1 style='text-align: center; color: white'>{title}</h1>", unsafe_allow_html=True)

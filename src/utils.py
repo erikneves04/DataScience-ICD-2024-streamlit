@@ -11,7 +11,7 @@ def PlotGraph(plt):
   st.pyplot(plt)
 
 def PlotMarkdown(text: str):
-  st.markdown(text)
+  st.markdown(text, unsafe_allow_html=True)
 
 def LoadDatabases():
   kindle_data = pd.read_csv('databases/kindle_data_clean.csv')

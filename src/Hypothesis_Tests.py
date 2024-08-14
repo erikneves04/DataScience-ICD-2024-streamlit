@@ -16,8 +16,9 @@ kindle_data, books = LoadDatabases()
 
 def Topics():
     return [
-        ('Como o preço influencia a avaliação?', HT2),
         ('Como os autores influenciam a avaliação?', HT1),
+        ('Como o preço influencia a avaliação?', HT2),
+        ('Impacto das avaliações na classificação "Best Seller"', HT3)
     ]
 
 def HT1():
@@ -94,3 +95,41 @@ def HT2():
     
     PlotGraph(plt)
     PlotJustifyText("O gráfico acima mostra a distribuição dos coeficientes de correlação obtidos através do método bootstrap para avaliar a relação entre o preço e a avaliação (estrelas). A correlação observada entre preço e avaliação é de -0.13, indicada pela linha vermelha pontilhada. Essa correlação negativa muito fraca sugere que não há uma relação linear significativa entre essas duas variáveis no conjunto de dados analisado. A distribuição bootstrap confirma essa observação, pois está centrada em torno de -0.13, indicando que variações no preço não estão fortemente associadas a variações nas avaliações.")
+
+def HT3():
+    PlotJustifyText("<b>Hipótese nula:</b> A média de estrelas de um best seller não é estatisticamente diferente da média de estrelas de um não best seller.")
+    PlotJustifyText("<b>Hipótese alternativa:</b> Existe relação significativa entre a avaliação de um best seller e a avaliação de um não best seller.")
+    data = kindle_data[['Stars', 'IsBestSeller']]
+
+    # Estatística observável = diferença entre a média de estrelas de best sellers e a média de estrelas de não best sellers
+    est_obs = data[data.IsBestSeller == True].Stars.mean() - data[data.IsBestSeller == False].Stars.mean()
+
+    #Bootstrap
+    acasos = []
+    for i in range(1000):
+        data_sample = data.sample(len(data), replace=True)
+        filtro = data_sample.IsBestSeller == True
+        d = data_sample[filtro].Stars.mean() - data_sample[~filtro].Stars.mean()
+        acasos.append(d)
+
+    # Quantis da distribuição
+    q_025 = np.percentile(acasos, 2.5)
+    q_975 = np.percentile(acasos, 97.5) 
+
+    # Contruindo o intervalo de confiança
+    erro_padrao = np.std(acasos) / np.sqrt(len(acasos))
+    media = np.mean(acasos)
+    intervalo_de_confianca = media - 1.96 * erro_padrao, media + 1.96 * erro_padrao
+
+    PlotJustifyText(f"Estatística observável {est_obs:0.6f}")
+
+    PlotJustifyText(f"Quantis da distribuição: [{q_025:0.6f}, {q_975:0.6f}]")
+
+    PlotJustifyText(f"Intervalo de confiança: [{intervalo_de_confianca[0]:0.6f}, {intervalo_de_confianca[1]:0.6f}]")
+
+    sns.histplot(data=acasos)\
+    .set(xlabel='$E_m^{BS}-E_m^{NBS}$', ylabel='Quantidade')
+
+    PlotGraph(plt)
+
+    PlotJustifyText("A nossa estatística observável de 0.0894 encontra-se dentro do intervalo de confiança. Portanto, o acaso explica a diferença entre o número médio de estrelas. Sendo assim, não rejeitamos a hipótese nula e podemos afirmar que o número médio de estrelas não afeta o fato de um livro ser um best seller.")

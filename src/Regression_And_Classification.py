@@ -18,6 +18,7 @@ from sklearn.preprocessing import StandardScaler, OneHotEncoder
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.compose import ColumnTransformer
 from sklearn.pipeline import Pipeline
+from sklearn.neighbors import KNeighborsClassifier
 
 sns.set_theme()
 warnings.filterwarnings("ignore")
@@ -100,3 +101,25 @@ def RC2():
     PlotMarkdown(f"### Classification Report\n\n{report}")
 
     PlotJustifyText("O modelo de Random Forest alcançou uma alta acurácia de 94%, indicando um bom desempenho geral. No entanto, ao analisar as métricas detalhadas, percebe-se que o modelo tem um desempenho significativamente melhor em prever avaliações altas (classe 1) com uma precisão de 96% e recall de 99%, enquanto o desempenho na classe de avaliações baixas (classe 0) é limitado, com uma precisão de 51% e recall de 24%. Isso sugere um desequilíbrio na capacidade do modelo de prever diferentes classes, possivelmente devido a um desbalanceamento nos dados.")
+    
+    # Os mesmos dados serão utilizados no KNN
+
+    PlotJustifyText("Para fins de comparação, o modelo KNN será testado com o mesmo conjunto de dados e, na sequência, ajustado para um K de 5. O resultado final é mostrado na tabela abaixo:")
+
+    clf_2 = Pipeline(steps=[('preprocessor', preprocessor),
+                        ('classifier', KNeighborsClassifier(n_neighbors=5))])
+    
+    clf_2.fit(X_train, y_train)
+    
+    y_pred_2 = clf_2.predict(X_test)
+
+    accuracy_2 = accuracy_score(y_test, y_pred_2)
+
+    report2 = classification_report(y_test, y_pred_2)
+
+    PlotJustifyText(f'Accuracy: {accuracy_2:.4f}')
+
+    PlotMarkdown(f"### Classification Report\n\n{report2}")
+
+    PlotJustifyText("O modelo KNN possui um desempenho semelhante ao Random Forest, mas a classe das avaliações baixas (0) é cerca de 20% mais preciso. Isso ocorre porque modelos mais simples, como o KNN, funcionam melhor em casos de baixa dimensionalidade")
+

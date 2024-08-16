@@ -17,6 +17,7 @@ def Topics():
     return [
         ('Preços x Avaliações', AE1),
         ('Autores x Avaliações', AE2),
+        ('Best Seller x Avaliações', AE3),
     ]
 
 def AE1():
@@ -92,3 +93,12 @@ def AE2():
     PlotGraph(plt)
     plt.close()
     PlotJustifyText("Esse resultado pode ser explicado pelo fato de que avaliações no geral tendem a ser boas, refletindo uma tendência positiva dos leitores ao avaliar livros. Além disso, novos autores com poucas publicações podem lançar obras de alta qualidade que recebem grande apreciação do público, ou podem ter uma base de leitores inicial que é particularmente entusiasta e generosa nas avaliações.")
+def AE3():
+    best_sellers = kindle_data.query('IsBestSeller == True')
+
+    fig = sns.histplot(data=best_sellers, x='Stars', kde=True)
+    plt.xlabel('Estrelas')
+    plt.ylabel('Quantidade de best sellers')
+    plt.show()
+    PlotGraph(plt)
+    plt.close()

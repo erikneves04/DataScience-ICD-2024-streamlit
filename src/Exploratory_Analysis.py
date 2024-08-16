@@ -19,6 +19,7 @@ def Topics():
         ('Autores x Avaliações', AE2),
         ('Best Seller x Avaliações', AE3),
         ('Distribuição dos lançamentos', AE4),
+        ('Distribuição dos preços', AE5)
     ]
 
 def AE1():
@@ -133,6 +134,31 @@ def AE4():
     fig = sns.lineplot(data=lancamentos_agregados, dashes=False, palette='rocket', markers=True)
     plt.xlabel('Mês')
     plt.ylabel('Montante de livros')
+    plt.show()
+    PlotGraph(plt)
+    plt.close()
+
+def AE5():
+    # Filtrando dados
+    df_filtered = kindle_data[(kindle_data['Price'] >= 0) & (kindle_data['Price'] <= 100)]
+
+    fig, axs = plt.subplots(1, 2, figsize=(18, 6), gridspec_kw={'width_ratios': [2, 2]})
+
+    # Histograma da distribuição de preços
+    sns.histplot(kindle_data['Price'], bins=20, color='b', edgecolor='black', alpha=0.7, ax=axs[0])
+    axs[0].set_xlabel('Preço', fontsize=14)
+    axs[0].set_ylabel('Quantidade', fontsize=14)
+    axs[0].set_title('Distribuição de Preços', fontsize=16)
+    axs[0].tick_params(axis='both', which='major', labelsize=12)
+
+    # Histograma da distribuição de preços entre 0 e 100
+    sns.histplot(df_filtered['Price'], bins=20, color='b', edgecolor='black', alpha=0.7, ax=axs[1])
+    axs[1].set_xlabel('Preço', fontsize=14)
+    axs[1].set_ylabel('Quantidade', fontsize=14)
+    axs[1].set_title('Distribuição de Preços (0-100)', fontsize=16)
+    axs[1].tick_params(axis='both', which='major', labelsize=12)
+
+    plt.tight_layout()
     plt.show()
     PlotGraph(plt)
     plt.close()

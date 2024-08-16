@@ -56,6 +56,7 @@ def AE1():
     axs[1].tick_params(axis='both', which='major', labelsize=12)
 
     PlotGraph(plt)
+    plt.close()
     PlotJustifyText("De acordo com os gráficos acima não temos nenhuma indicação de que exista uma relação entre essas duas variáveis, sendo assim, será necessário partir para uma segunda análise. Na segunda etapa, que será abordada em outro notebook, buscamos quebrar a associação entre preço e avaliação aplicando um teste de permutação em amostras reduzidas dos dados.")
 
 def AE2():
@@ -89,5 +90,5 @@ def AE2():
 
     plt.tight_layout()
     PlotGraph(plt)
-
+    plt.close()
     PlotJustifyText("Esse resultado pode ser explicado pelo fato de que avaliações no geral tendem a ser boas, refletindo uma tendência positiva dos leitores ao avaliar livros. Além disso, novos autores com poucas publicações podem lançar obras de alta qualidade que recebem grande apreciação do público, ou podem ter uma base de leitores inicial que é particularmente entusiasta e generosa nas avaliações.")

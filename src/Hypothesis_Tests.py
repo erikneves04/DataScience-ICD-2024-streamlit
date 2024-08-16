@@ -52,8 +52,8 @@ def HT1():
     conf_interval = np.percentile(bootstrap_stats, [2.5, 97.5])
 
     # Impressão dos resultados
-    PlotJustifyText(f'Estatística Observada: {between_group_variance:.3f}')
-    PlotMarkdown(f'Intervalo de Confiança de 95%: [{conf_interval[0]:.3f}, {conf_interval[1]:.3f}]')
+    PlotJustifyText(f'Estatística Observável: {between_group_variance:.6f}')
+    PlotMarkdown(f'Intervalo de Confiança de 95%: [{conf_interval[0]:.6f}, {conf_interval[1]:.6f}]')
 
     # Plotar os resultados
     sns.histplot(bootstrap_stats, bins=30, alpha=0.7)
@@ -62,7 +62,7 @@ def HT1():
     plt.axvline(conf_interval[1], color='green', linestyle='--', linewidth=2, label=f'97.5% Percentil: {conf_interval[1]:.2f}')
     plt.xlabel('Variância entre Grupos Bootstrap')
     plt.ylabel('Frequência')
-    plt.title('Teste de Hipótese Bootstrap para Avaliação de Autores')
+    plt.title('Teste de Hipótese: Bootstrap para Avaliação de Autores')
     plt.legend()
     plt.xlim(0, conf_interval[1] * 1.5)
     plt.show()
@@ -85,6 +85,10 @@ def HT2():
         bootstrap_stats.append(bootstrap_stat)
 
     bootstrap_stats = np.array(bootstrap_stats)
+    conf_interval = np.percentile(bootstrap_stats, [2.5, 97.5])
+
+    PlotJustifyText(f'Correlação Observável: {observed_stat:.6f}')
+    PlotMarkdown(f'Intervalo de Confiança de 95%: [{conf_interval[0]:.6f}, {conf_interval[1]:.6f}]')
 
     # Plotar os resultados
     sns.histplot(data=bootstrap_stats, bins=30, alpha=0.7)
@@ -109,29 +113,24 @@ def HT3():
     #Bootstrap
     acasos = []
     for i in range(1000):
-        data_sample = data.sample(len(data), replace=True)
+        data_sample = data.sample(frac=0.05, replace=True)
         filtro = data_sample.IsBestSeller == True
         d = data_sample[filtro].Stars.mean() - data_sample[~filtro].Stars.mean()
         acasos.append(d)
 
-    # Quantis da distribuição
-    q_025 = np.percentile(acasos, 2.5)
-    q_975 = np.percentile(acasos, 97.5) 
-
-    # Contruindo o intervalo de confiança
-    erro_padrao = np.std(acasos) / np.sqrt(len(acasos))
-    media = np.mean(acasos)
-    intervalo_de_confianca = media - 1.96 * erro_padrao, media + 1.96 * erro_padrao
+    acasos = np.array(acasos)
+    intervalo_de_confianca = np.percentile(acasos, [2.5, 97.5])
 
     PlotJustifyText(f"Estatística observável {est_obs:0.6f}")
+    PlotMarkdown(f"Intervalo de confiança 95%: [{intervalo_de_confianca[0]:0.6f}, {intervalo_de_confianca[1]:0.6f}]")
 
-    PlotJustifyText(f"Quantis da distribuição: [{q_025:0.6f}, {q_975:0.6f}]")
-
-    PlotJustifyText(f"Intervalo de confiança: [{intervalo_de_confianca[0]:0.6f}, {intervalo_de_confianca[1]:0.6f}]")
-
-    sns.histplot(data=acasos)\
-    .set(xlabel='$E_m^{BS}-E_m^{NBS}$', ylabel='Quantidade')
-
+    sns.histplot(acasos,bins=30 ,alpha=0.7)
+    plt.axvline(x=est_obs, color='red', linestyle='--', linewidth=2, label=f'Estatística observável: {est_obs:0.6f}')
+    plt.xlabel("Diferença entre a média de estrelas de best sellers e a média de estrelas de não best sellers")
+    plt.ylabel("Frequência")
+    plt.title("Teste de Hipótese: Avaliação de Best Seller vs. Avaliação de Nao Best Seller")
+    plt.legend()
+    plt.show()
     PlotGraph(plt)
 
     PlotJustifyText("A nossa estatística observável de 0.0894 encontra-se dentro do intervalo de confiança. Portanto, o acaso explica a diferença entre o número médio de estrelas. Sendo assim, não rejeitamos a hipótese nula e podemos afirmar que o número médio de estrelas não afeta o fato de um livro ser um best seller.")

@@ -18,6 +18,7 @@ def Topics():
         ('Preços x Avaliações', AE1),
         ('Autores x Avaliações', AE2),
         ('Best Seller x Avaliações', AE3),
+        ('Distribuição dos lançamentos', AE4),
     ]
 
 def AE1():
@@ -99,6 +100,39 @@ def AE3():
     fig = sns.histplot(data=best_sellers, x='Stars', kde=True)
     plt.xlabel('Estrelas')
     plt.ylabel('Quantidade de best sellers')
+    plt.show()
+    PlotGraph(plt)
+    plt.close()
+
+
+def AE4():
+    # Convertendo a coluna de datas (string) para um objeto datetime 
+    meses_publicacao = pd.to_datetime(kindle_data['PublishDate'], errors='coerce') # Retorna uma Panda Series
+    kindle_data['PublishMonth'] = meses_publicacao.dt.month
+
+    # Todos os livros lancados no mês
+    lancamentos_total_meses = kindle_data.groupby('PublishMonth', as_index=False)[['AmazonID']].count() 
+
+    # Todos os best sellers lançados no mês
+    lancamentos_BS_meses = kindle_data.query('IsBestSeller == True')\
+        .groupby('PublishMonth', as_index=False)[['AmazonID']].count()
+
+    # Todos os livros não-best sellers lançados no mês
+    lancamentos_nonBS_meses = kindle_data.query('IsBestSeller == False')\
+        .groupby('PublishMonth', as_index=False)[['AmazonID']].count()
+
+    # Criando um dataframe para armazenar os valores agregados
+    lancamentos_agregados = pd.DataFrame({'Mes': [],'Totais': [], 'BestSellers': [], 'NonBestSellers': []})
+    lancamentos_agregados['Mes'] = lancamentos_total_meses['PublishMonth']
+    lancamentos_agregados['Totais'] = lancamentos_total_meses['AmazonID']
+    lancamentos_agregados['BestSellers'] = lancamentos_BS_meses['AmazonID']
+    lancamentos_agregados['NonBestSellers'] = lancamentos_nonBS_meses['AmazonID']
+
+    lancamentos_agregados.set_index('Mes', inplace=True)
+
+    fig = sns.lineplot(data=lancamentos_agregados, dashes=False, palette='rocket', markers=True)
+    plt.xlabel('Mês')
+    plt.ylabel('Montante de livros')
     plt.show()
     PlotGraph(plt)
     plt.close()

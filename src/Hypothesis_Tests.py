@@ -1,4 +1,4 @@
-from utils import PlotJustifyText, PlotMarkdown, PlotImage, PlotImages
+from utils import PlotJustifyText, PlotMarkdown, PlotImage
 
 def Topics():
     return [

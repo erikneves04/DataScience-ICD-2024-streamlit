@@ -39,14 +39,6 @@ Para executar o projeto localmente, siga as instruções abaixo:
     streamlit run app.py
     ```
 
-## Estrutura do Projeto
-
-- **app.py**: Arquivo principal que contém o código da aplicação Streamlit.
-- **data/**: Diretório que contém os datasets utilizados na análise.
-- **scripts/**: Scripts auxiliares para pré-processamento de dados e modelagem.
-- **assets/**: Imagens e outros recursos estáticos utilizados na aplicação.
-- **README.md**: Este arquivo, que fornece uma visão geral do projeto.
-
 ## Tecnologias Utilizadas
 
 - **Python**: Linguagem de programação principal utilizada no projeto.

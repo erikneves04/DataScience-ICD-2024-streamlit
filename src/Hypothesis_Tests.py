@@ -1,137 +1,80 @@
-from utils import PlotJustifyText, PlotGraph, LoadDatabases, PlotMarkdown
-
-import pandas as pd
-import matplotlib
-from matplotlib import pyplot as plt
-import numpy as np
-import seaborn as sns
-
-sns.set_theme()
-
-# Setando o tamanho padrão das figuras
-matplotlib.rcParams['figure.figsize'] = (15.0, 9.0)
-
-# Acessos aos dados
-kindle_data, books = LoadDatabases()
+from utils import PlotJustifyText, PlotMarkdown, PlotImage
 
 def Topics():
     return [
         ('Como os autores influenciam a avaliação?', HT1),
         ('Como o preço influencia a avaliação?', HT2),
-        ('Impacto das avaliações na classificação "Best Seller"', HT3)
+        ('Impacto das avaliações na classificação "Best Seller"', HT3),
+        ('Como o número de estrelas influencia no fato de ser um BestSeller', HT4),
+        ('Como o fato de ser "IsKindleUnlimited" influencia no fato de um livro ser Best Seller', HT5),
+        ('A categoria influencia em um livro ser Best Seller?', HT6)       
     ]
 
 def HT1():
     PlotMarkdown("<b>Hipótese nula:</b> Não há diferença significativa nas avaliações dos livros com base no autor. Ou seja, as avaliações atribuídas aos livros não são influenciadas pelo autor que os escreveu.")
     PlotMarkdown("<b>Hipótese alternativa:</b> Existe uma diferença significativa nas avaliações dos livros com base no autor. Ou seja, o autor influencia as avaliações atribuídas aos livros.")
 
-    # Cálculo da Estatística Observada
-    group_means = kindle_data.groupby('Authors')['Stars'].mean()
-    overall_mean = kindle_data['Stars'].mean()
+    PlotJustifyText('Estatística Observável: 53926.664608')
+    PlotMarkdown('Intervalo de Confiança de 95%: [2936.715894, 3840.589003]')
 
-    between_group_variance = ((group_means - overall_mean) ** 2).sum()
-
-    # Número de amostras de bootstrap
-    num_bootstrap = 1000
-
-    # Lista para armazenar as estatísticas de bootstrap
-    bootstrap_stats = []
-
-    # Execução do Bootstrap
-    for _ in range(num_bootstrap):
-        bootstrap_sample = kindle_data.sample(frac=0.05, replace=True)
-        group_means_bootstrap = bootstrap_sample.groupby('Authors')['Stars'].mean()
-        overall_mean_bootstrap = bootstrap_sample['Stars'].mean()
-        between_group_variance_bootstrap = ((group_means_bootstrap - overall_mean_bootstrap) ** 2).sum()
-        bootstrap_stats.append(between_group_variance_bootstrap)
-
-    # Conversão da lista de estatísticas para um array numpy
-    bootstrap_stats = np.array(bootstrap_stats)
-
-    # Cálculo do intervalo de confiança de 95%
-    conf_interval = np.percentile(bootstrap_stats, [2.5, 97.5])
-
-    # Impressão dos resultados
-    PlotJustifyText(f'Estatística Observável: {between_group_variance:.6f}')
-    PlotMarkdown(f'Intervalo de Confiança de 95%: [{conf_interval[0]:.6f}, {conf_interval[1]:.6f}]')
-
-    # Plotar os resultados
-    sns.histplot(bootstrap_stats, bins=30, alpha=0.7)
-    plt.axvline(between_group_variance, color='red', linestyle='--', linewidth=2, label=f'Estatística Observada: {between_group_variance:.2f}')
-    plt.axvline(conf_interval[0], color='green', linestyle='--', linewidth=2, label=f'2.5% Percentil: {conf_interval[0]:.2f}')
-    plt.axvline(conf_interval[1], color='green', linestyle='--', linewidth=2, label=f'97.5% Percentil: {conf_interval[1]:.2f}')
-    plt.xlabel('Variância entre Grupos Bootstrap')
-    plt.ylabel('Frequência')
-    plt.title('Teste de Hipótese: Bootstrap para Avaliação de Autores')
-    plt.legend()
-    plt.xlim(0, conf_interval[1] * 1.5)
-    plt.show()
+    PlotImage('HT1.png')
     
-    PlotGraph(plt)
     PlotJustifyText("A estatística observada de 53926,66 é significativamente maior do que o intervalo de confiança bootstrap (aproximadamente, 2960 a 3860), indicando que a variância entre as médias das avaliações dos autores não é atribuída ao acaso. O método bootstrap permite rejeitar a hipótese nula com alta confiança. Esse resultado sugere que fatores como estilo de escrita e engajamento com os leitores fazem com que autores bem avaliados escrevam livros que consistentemente agradam ao público.")
-    plt.close()
 
 def HT2():
     PlotMarkdown("<b>Hipótese nula:</b> Não há relação significativa entre o preço e a avaliação dos livros. Ou seja, o preço não influencia as avaliações atribuídas pelos leitores.")
     PlotMarkdown("<b>Hipótese alternativa:</b> Existe uma relação significativa entre o preço e a avaliação dos livros. Ou seja, o preço influencia as avaliações atribuídas pelos leitores.")
 
-    observed_stat = np.corrcoef(kindle_data['Price'], kindle_data['Stars'])[0, 1]
+    PlotJustifyText('Correlação Observável: -0.126705')
+    PlotMarkdown('Intervalo de Confiança de 95%: [-0.175363, -0.078255]')
 
-    # Gerarando as amostras e calculando a correlação
-    bootstrap_stats = []
-    for _ in range(1000):
-        bootstrap_sample = kindle_data.sample(frac=0.05, replace=True)
-        bootstrap_stat = np.corrcoef(bootstrap_sample['Price'], bootstrap_sample['Stars'])[0, 1]
-        bootstrap_stats.append(bootstrap_stat)
+    PlotImage('HT2.png')
 
-    bootstrap_stats = np.array(bootstrap_stats)
-    conf_interval = np.percentile(bootstrap_stats, [2.5, 97.5])
-
-    PlotJustifyText(f'Correlação Observável: {observed_stat:.6f}')
-    PlotMarkdown(f'Intervalo de Confiança de 95%: [{conf_interval[0]:.6f}, {conf_interval[1]:.6f}]')
-
-    # Plotar os resultados
-    sns.histplot(data=bootstrap_stats, bins=30, alpha=0.7)
-    plt.axvline(x=observed_stat, color='red', linestyle='--', linewidth=2, label=f'Correlação Observada: {observed_stat:.2f}')
-    plt.xlabel('Coeficiente de Correlação Bootstrap')
-    plt.ylabel('Frequência')
-    plt.title('Teste de Hipótese: Preço vs Avaliação')
-    plt.legend()
-    
-    PlotGraph(plt)
     PlotJustifyText("O gráfico acima mostra a distribuição dos coeficientes de correlação obtidos através do método bootstrap para avaliar a relação entre o preço e a avaliação (estrelas). A correlação observada entre preço e avaliação é de -0.13, indicada pela linha vermelha pontilhada. Essa correlação negativa muito fraca sugere que não há uma relação linear significativa entre essas duas variáveis no conjunto de dados analisado. A distribuição bootstrap confirma essa observação, pois está centrada em torno de -0.13, indicando que variações no preço não estão fortemente associadas a variações nas avaliações.")
-    plt.close()
 
 def HT3():
     PlotJustifyText("<b>Hipótese nula:</b> A média de estrelas de um best seller não é estatisticamente diferente da média de estrelas de um não best seller.")
     PlotJustifyText("<b>Hipótese alternativa:</b> Existe relação significativa entre a avaliação de um best seller e a avaliação de um não best seller.")
-    data = kindle_data[['Stars', 'IsBestSeller']]
+    
+    PlotJustifyText('Estatística observável 0.089406')
+    PlotMarkdown('Intervalo de confiança 95%: [0.015517, 0.149543]')
 
-    # Estatística observável = diferença entre a média de estrelas de best sellers e a média de estrelas de não best sellers
-    est_obs = data[data.IsBestSeller == True].Stars.mean() - data[data.IsBestSeller == False].Stars.mean()
-
-    #Bootstrap
-    acasos = []
-    for i in range(1000):
-        data_sample = data.sample(frac=0.05, replace=True)
-        filtro = data_sample.IsBestSeller == True
-        d = data_sample[filtro].Stars.mean() - data_sample[~filtro].Stars.mean()
-        acasos.append(d)
-
-    acasos = np.array(acasos)
-    intervalo_de_confianca = np.percentile(acasos, [2.5, 97.5])
-
-    PlotJustifyText(f"Estatística observável {est_obs:0.6f}")
-    PlotMarkdown(f"Intervalo de confiança 95%: [{intervalo_de_confianca[0]:0.6f}, {intervalo_de_confianca[1]:0.6f}]")
-
-    sns.histplot(acasos,bins=30 ,alpha=0.7)
-    plt.axvline(x=est_obs, color='red', linestyle='--', linewidth=2, label=f'Estatística observável: {est_obs:0.6f}')
-    plt.xlabel("Diferença entre a média de estrelas de best sellers e a média de estrelas de não best sellers")
-    plt.ylabel("Frequência")
-    plt.title("Teste de Hipótese: Avaliação de Best Seller vs. Avaliação de Nao Best Seller")
-    plt.legend()
-    plt.show()
-    PlotGraph(plt)
+    PlotImage('HT3.png')
 
     PlotJustifyText("A nossa estatística observável de 0.0894 encontra-se dentro do intervalo de confiança. Portanto, o acaso explica a diferença entre o número médio de estrelas. Sendo assim, não rejeitamos a hipótese nula e podemos afirmar que o número médio de estrelas não afeta o fato de um livro ser um best seller.")
-    plt.close()
+    
+def HT4():
+    PlotJustifyText("Vamos denotar a média de estrelas de best sellers por $E_m^{BS}$, e a média de estrelas de não best sellers por $E_m^{NBS}$. Portanto, podemos definir nossas hipóteses como:")
+    
+    PlotJustifyText("<b>Hipótese nula:</b> A média de estrelas de um best seller não é estatisticamente diferente da média de estrelas de um não best seller.")
+    PlotJustifyText("<b>Hipótese alternativa:</b> Existe relação significativa entre a avaliação de um best seller e a avaliação de um não best seller.")
+    
+    PlotJustifyText('Estatística observável 0.089406')
+    
+    PlotImage('HT4.png')
+    
+    PlotMarkdown('Quartis inferior e superior 95%: [0.073348, 0.105047]')
+    PlotMarkdown('Intervalo de confiança 95%: [0.089357, 0.089672]')
+    
+    PlotJustifyText("A nossa estatística observável de 0.0894 encontra-se dentro do intervalo de confiança. Portanto, o acaso explica a diferença entre o número médio de estrelas. Sendo assim, não rejeitamos a hipótese nula e podemos afirmar que o número médio de estrelas não afeta o fato de um livro ser um best seller.")
+    
+def HT5():   
+    PlotJustifyText("<b>Hipótese nula:</b> Não há diferença na proporção de Best Sellers entre livros que fazem parte do Kindle Unlimited e aqueles que não fazem parte. Isso significa que a diferença média observada no bootstrapping (D = 0) é devido ao acaso.")
+    PlotJustifyText("<b>Hipótese alternativa:</b> Há uma diferença na proporção de Best Sellers entre livros que fazem parte do Kindle Unlimited e aqueles que não fazem parte. Isso significa que a diferença média observada no bootstrapping (D ≠ 0) não é apenas devido ao acaso.")
+        
+    PlotImage('HT5.png')
+    
+    PlotMarkdown('Quantis 2.5% e 97.5%: [0.0308654935155852, 0.035217891848341835]')
+    PlotMarkdown('Intervalo de Confiança: [0.03287641063436545, 0.03301593857822303]')
+    PlotMarkdown('Estatística Observável = 0.0329796434937253')
+    
+    PlotJustifyText("Dado que o intervalo de confiança (0.03280, 0.03320) não inclui zero e é relativamente estreito, podemos concluir que há evidências estatisticamente significativas que sugerem que fazer parte do Kindle Unlimited aumenta a chance de um livro se tornar um bestseller. A estatística observável (est_obs) de 0.03298 indica que os livros do Kindle Unlimited têm cerca de 3,3% mais probabilidade de serem bestsellers em comparação com os livros que não são do Kindle Unlimited, e essa diferença é estatisticamente significativa.")
+    
+def HT6():
+    PlotJustifyText("<b>Hipótese nula:</b> Não há diferença significativa no número de Best Sellers entre as diferentes categorias. Ou seja, a diferença observada entre o valor nos dados reais e o valor nos dados simulados é atribuível ao acaso. Se o valor observado nos dados reais estiver dentro do intervalo de valores gerados pelos dados simulados, aceitamos a hipótese nula, indicando que a categoria não influencia significativamente na probabilidade de um livro ser um Best Seller.")
+    PlotJustifyText("<b>Hipótese alternativa:</b> Há uma diferença significativa no número de Best Sellers entre as diferentes categorias. Ou seja, a diferença entre o valor observado nos dados reais e o valor nos dados simulados não é atribuível ao acaso, indicando que a categoria tem uma influência significativa na probabilidade de um livro ser um Best Seller.")
+        
+    PlotImage('HT6.png')
+    PlotImage('HT7.png')
+      
+    PlotJustifyText("Com os testes de permutação, tornamos aleatório a categoria de um livro ser Best Seller ou não, assumindo apenas que essas váriaveis fazem parte da análise para ser BestSeller. Com isso após cada permutação, é feita uma contagem de BestSellers por categoria e é subtraído o valor observado origal e armazenado em uma matriz. Feito isso, plotamos os histogramas com os valores simulados primeiras categorias mais frequentes. Como é possível observar, as diferenças entre os valores não estão centrados em 0, ou seja, nos dados atuais, a categoria influência ser um Best Seller, ja que a quantia de Best Sellers continua a mesma, o que muda é a aleatoriedade de uma categoria ser Best Seller ou não.")

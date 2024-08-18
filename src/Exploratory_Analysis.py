@@ -1,17 +1,4 @@
-from utils import PlotJustifyText, PlotGraph, LoadDatabases
-
-import pandas as pd
-import matplotlib
-from matplotlib import pyplot as plt
-import numpy as np
-import seaborn as sns
-sns.set_theme()
-
-#Setando o tamanho padrão das figuras
-matplotlib.rcParams['figure.figsize'] = (15.0, 9.0)
-
-# Acessos aos dados
-kindle_data, books = LoadDatabases()
+from utils import PlotJustifyText, PlotImage
 
 def Topics():
     return [
@@ -19,147 +6,53 @@ def Topics():
         ('Autores x Avaliações', AE2),
         ('Best Seller x Avaliações', AE3),
         ('Distribuição dos lançamentos', AE4),
-        ('Distribuição dos preços', AE5)
+        ('Distribuição dos preços', AE5),
+        ('Relação de IsBestSeller com preço', AE6),
+        ('Relação da Categoria e IsBestSeller', AE7),
+        ('Relação de IsKindleUnlimited e IsBestSeller', AE8),
+        ('Categoria mais vendida por Ano', AE9)
     ]
 
 def AE1():
-    PlotJustifyText("Nesse tópico buscamos avaliar se existe uma relação entre o preço de um livro e suas avaliação média. Para realizar essa análise vamos nos basear na média de preços e em um arredondamento das avaliações(que serão agrupadas de 0 a 5 e com seus decimais intermediários -- 0.5). Além disso serão exibidos dois cenários, um com os dados originais e outro com 95% dos dados, visando reduzir a influência de dados extremos e fora do normal(outliers) na visualização.")
-    
-    # Adicionando uma nova coluna 'RoundedStars' para arredondar as estrelas para o meio mais próximo
-    decimal_values = np.modf(kindle_data['Stars'])[0]
-    int_values = kindle_data['Stars'] - decimal_values
-    kindle_data['RoundedStars'] = np.where(
-        decimal_values <= 0.3,
-        int_values,
-        np.where(decimal_values >= 0.7, int_values + 1, int_values + 0.5)
-    )
-
-    # Removendo outliers com base nos percentis
-    lower_bound = np.percentile(kindle_data['Price'], 2.5)
-    upper_bound = np.percentile(kindle_data['Price'], 97.5)
-    df_no_outliers = kindle_data[(kindle_data['Price'] >= lower_bound) & (kindle_data['Price'] <= upper_bound)]
-
-    # Calculando a média dos preços agrupados pelas estrelas arredondadas
-    series = kindle_data[['RoundedStars', 'Price']].groupby('RoundedStars').mean()
-    series_no_outliers = df_no_outliers[['RoundedStars', 'Price']].groupby('RoundedStars').mean()
-    
-    fig, axs = plt.subplots(1, 2, figsize=(18, 6), sharey=True)
-
-    # Gráfico com todos os dados
-    sns.lineplot(x=series.index, y=series['Price'], marker='o', color='b', ax=axs[0])
-    axs[0].set_xlabel('Stars', fontsize=14)
-    axs[0].set_ylabel('Average Price (R$)', fontsize=14)
-    axs[0].set_title('Preço Médio vs. Avaliação', fontsize=16)
-    axs[0].tick_params(axis='both', which='major', labelsize=12)
-
-    # Gráfico sem outliers
-    sns.lineplot(x=series_no_outliers.index, y=series_no_outliers['Price'], marker='o', color='b', ax=axs[1])
-    axs[1].set_xlabel('Stars', fontsize=14)
-    axs[1].set_title('Preço Médio vs. Avaliação (sem Outliers)', fontsize=16)
-    axs[1].tick_params(axis='both', which='major', labelsize=12)
-
-    PlotGraph(plt)
-    plt.close()
+    PlotJustifyText("Nesse tópico buscamos avaliar se existe uma relação entre o preço de um livro e suas avaliação média. Para realizar essa análise vamos nos basear na média de preços e em um arredondamento das avaliações(que serão agrupadas de 0 a 5 e com seus decimais intermediários -- 0.5). Além disso serão exibidos dois cenários, um com os dados originais e outro com 95% dos dados, visando reduzir a influência de dados extremos e fora do normal(outliers) na visualização.")    
+    PlotImage('AE1.png')
     PlotJustifyText("De acordo com os gráficos acima não temos nenhuma indicação de que exista uma relação entre essas duas variáveis, sendo assim, será necessário partir para uma segunda análise. Na segunda etapa, que será abordada em outro notebook, buscamos quebrar a associação entre preço e avaliação aplicando um teste de permutação em amostras reduzidas dos dados.")
 
 def AE2():
     PlotJustifyText("Neste tópico buscamos avaliar se existe uma relação entre o número de publicações de um autor e sua avaliação média. Para realizar essa análise, vamos nos basear na média do número de publicações e em um arredondamento das avaliações que fizemos anteriormente.")
-
-    # Calculando o número de publicações por autor
-    publications_per_author = kindle_data['Authors'].value_counts().reset_index()
-    publications_per_author.columns = ['Authors', 'Publications']
-
-    # Calculando a média das avaliações por autor
-    average_stars_per_author = kindle_data.groupby('Authors')['RoundedStars'].mean().reset_index()
-
-    # Combinando os dados de publicações e avaliações
-    author_stats = pd.merge(publications_per_author, average_stars_per_author, on='Authors')
-
-    fig, axs = plt.subplots(1, 2, figsize=(18, 6), gridspec_kw={'width_ratios': [2, 2]})
-
-    # Gráfico de dispersão
-    sns.scatterplot(x='RoundedStars', y='Publications', data=author_stats, ax=axs[0], alpha=0.5, color='b')
-    axs[0].set_xlabel('Avaliação Média', fontsize=14)
-    axs[0].set_ylabel('Número de Publicações', fontsize=14)
-    axs[0].set_title('Número de Publicações vs. Avaliação Média', fontsize=16)
-    axs[0].tick_params(axis='both', which='major', labelsize=12)
-
-    # Histograma das avaliações médias
-    sns.histplot(author_stats['RoundedStars'], bins=np.arange(0, 5.5, 0.5), ax=axs[1], alpha=0.7, color='b', edgecolor='black')
-    axs[1].set_xlabel('Avaliação Média', fontsize=14)
-    axs[1].set_ylabel('Frequência', fontsize=14)
-    axs[1].set_title('Distribuição das Avaliações Médias', fontsize=16)
-    axs[1].tick_params(axis='both', which='major', labelsize=12)
-
-    plt.tight_layout()
-    PlotGraph(plt)
-    plt.close()
+    PlotImage('AE2.png')
     PlotJustifyText("Esse resultado pode ser explicado pelo fato de que avaliações no geral tendem a ser boas, refletindo uma tendência positiva dos leitores ao avaliar livros. Além disso, novos autores com poucas publicações podem lançar obras de alta qualidade que recebem grande apreciação do público, ou podem ter uma base de leitores inicial que é particularmente entusiasta e generosa nas avaliações.")
+    
 def AE3():
-    best_sellers = kindle_data.query('IsBestSeller == True')
-
-    fig = sns.histplot(data=best_sellers, x='Stars', kde=True)
-    plt.xlabel('Estrelas')
-    plt.ylabel('Quantidade de best sellers')
-    plt.show()
-    PlotGraph(plt)
-    plt.close()
-
+    PlotImage('AE3.png')
+    PlotJustifyText('Média das Estrelas dos Best Sellers: 4.49')    
+    PlotJustifyText("Com base no gráfico e na estatística observada, livros que são Best Seller tem entre 4 e 5 estrelas, com média de aproximadamente 4,5 estrelas. Isso não é estranho, visto que a próprio conceito de 'BestSeller' carrega essa característica de ter uma avaliação boa, de modo geral.")
 
 def AE4():
-    # Convertendo a coluna de datas (string) para um objeto datetime 
-    meses_publicacao = pd.to_datetime(kindle_data['PublishDate'], errors='coerce') # Retorna uma Panda Series
-    kindle_data['PublishMonth'] = meses_publicacao.dt.month
+   PlotImage('AE4.png')
 
-    # Todos os livros lancados no mês
-    lancamentos_total_meses = kindle_data.groupby('PublishMonth', as_index=False)[['AmazonID']].count() 
+def AE5():     
+    PlotImage('AE5.png')
+    PlotJustifyText("A análise dos histogramas revela que a maior parte dos livros tem preços concentrados entre 0 e 20 dólares. Essa concentração sugere que a faixa de preço mais acessível é bastante popular entre os consumidores, possivelmente devido à sua atratividade financeira e à acessibilidade para um público mais amplo. Essa concentração pode refletir estratégias de precificação adotadas por editores e autores para alcançar um público maior e maximizar as vendas.")
 
-    # Todos os best sellers lançados no mês
-    lancamentos_BS_meses = kindle_data.query('IsBestSeller == True')\
-        .groupby('PublishMonth', as_index=False)[['AmazonID']].count()
+def AE6():
+    PlotJustifyText("Nesse tópico buscamos avaliar se existe uma relação entre o preço de um livro e se ele foi Best Seller. Para realizar essa análise vamos nos basear em faixas de preços e verificar em qual faixa se concentra mais os livros que foram Best Seller.")
+    
+    PlotJustifyText('O preço máximo é: R$ 682.0')
+    PlotJustifyText('O preço mínimo é: R$ 000.0')
+    PlotImage('AE6.png')
+    
+    PlotJustifyText("Analisando o Gráfico anterior, a faixa de preço predominantemente com livros Best Sellers é de 0 a 50 reais. Provavelmente, isso não é explicado pelo acaso, visto que a faixa de preço é relativamente baixa, o que pode gerar mais vendas, mas será bom testar para ver se a relação com o acaso ou não.Além disso, com o histograma, verificamos que os livros que custam 5 reais são os mais vendidos.")
+    
+def AE7():
+    PlotJustifyText("Nesse tópico buscamos avaliar se existe uma relação entre a Categoria de um livro e Best Seller, para ver quais categorias com mais Best Sellers. Para realizar essa análise vamos verificar em qual categoria se concentra mais os livros que foram Best Seller.")
+    PlotImage('AE7.png')
+    PlotJustifyText("Nessa parte, as 3 principais categorias são 'Literature & Fiction', 'Science & Math' e 'Children's eBooks'. Literatura e Ficção pode ser explicado por ser um gênero que alcança todas as faixas etárias de idade. Matemática e Ciência geraram pesquisas no Google, as quais nos levaram a crer que esse genêro está no TOP 2 por ser livro que aborda aspectos da ciência de forma literária, como o livro Technology and Society: A Critical Analysis of 'The Coming Wave', que fala sobre as oportunidades e desafios trazidos pela Era Moderna. Esse tópico é interessante por si só, por trazer conhecimento de diversas formas, que não seja acadêmico. Livros para criança também é fácil de gerar uma hipotese, visto que a população mundial de crianças chega a 1/4 da população mundial total. Após essa pequena análise, vamos focar nos testes para ver se o acaso explica isso. Caso acaso não explique, nossa teoria pode estar certa.")
 
-    # Todos os livros não-best sellers lançados no mês
-    lancamentos_nonBS_meses = kindle_data.query('IsBestSeller == False')\
-        .groupby('PublishMonth', as_index=False)[['AmazonID']].count()
+def AE8():
+    PlotJustifyText("Nesse tópico buscamos entender se existe uma relação entre ser Best Seller e Kindle Unlimited. Para analisar agregaremos todos os Best Sellers e checar a frequência que pertence ao Kindle Unlimited.")
+    PlotImage('AE8.png')
+    PlotJustifyText("A observação de que a maioria dos livros Best Seller é Kindle Unlimited sugere uma possível influência do programa Kindle Unlimited (KU) nos rankings de best sellers da Amazon. Isso pode indicar que o algoritmo da Amazon favorece ou dá maior visibilidade a livros que fazem parte desse programa.")
 
-    # Criando um dataframe para armazenar os valores agregados
-    lancamentos_agregados = pd.DataFrame({'Mes': [],'Totais': [], 'BestSellers': [], 'NonBestSellers': []})
-    lancamentos_agregados['Mes'] = lancamentos_total_meses['PublishMonth']
-    lancamentos_agregados['Totais'] = lancamentos_total_meses['AmazonID']
-    lancamentos_agregados['BestSellers'] = lancamentos_BS_meses['AmazonID']
-    lancamentos_agregados['NonBestSellers'] = lancamentos_nonBS_meses['AmazonID']
-
-    lancamentos_agregados.set_index('Mes', inplace=True)
-
-    fig = sns.lineplot(data=lancamentos_agregados, dashes=False, palette='rocket', markers=True)
-    plt.xlabel('Mês')
-    plt.ylabel('Montante de livros')
-    plt.show()
-    PlotGraph(plt)
-    plt.close()
-    PlotJustifyText('As vendas apresentam picos sazonais significativos, particularmente no mês 9. Embora os BestSellers contribuam com uma pequena porcentagem das vendas, sua importância aumenta em meses de pico, como evidenciado em setembro.')
-
-def AE5():
-    # Filtrando dados
-    df_filtered = kindle_data[(kindle_data['Price'] >= 0) & (kindle_data['Price'] <= 100)]
-
-    fig, axs = plt.subplots(1, 2, figsize=(18, 6), gridspec_kw={'width_ratios': [2, 2]})
-
-    # Histograma da distribuição de preços
-    sns.histplot(kindle_data['Price'], bins=20, color='b', edgecolor='black', alpha=0.7, ax=axs[0])
-    axs[0].set_xlabel('Preço', fontsize=14)
-    axs[0].set_ylabel('Quantidade', fontsize=14)
-    axs[0].set_title('Distribuição de Preços', fontsize=16)
-    axs[0].tick_params(axis='both', which='major', labelsize=12)
-
-    # Histograma da distribuição de preços entre 0 e 100
-    sns.histplot(df_filtered['Price'], bins=20, color='b', edgecolor='black', alpha=0.7, ax=axs[1])
-    axs[1].set_xlabel('Preço', fontsize=14)
-    axs[1].set_ylabel('Quantidade', fontsize=14)
-    axs[1].set_title('Distribuição de Preços (0-100)', fontsize=16)
-    axs[1].tick_params(axis='both', which='major', labelsize=12)
-
-    plt.tight_layout()
-    plt.show()
-    PlotGraph(plt)
-    plt.close()
+def AE9():
+    PlotImage('AE9.png')

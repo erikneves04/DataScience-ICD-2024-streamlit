@@ -21,7 +21,7 @@ def Topics():
         ('Best Seller x Avaliações', AE3),
         ('Distribuição dos lançamentos', AE4),
         ('Distribuição dos preços', AE5),
-        ('Relação de IsBestSeller com preço', AE6)
+        ('Relação de IsBestSeller com preço', AE6),
         ('Relação da Categoria e IsBestSeller', AE7),
         ('Relação de IsKindleUnlimited e IsBestSeller', AE8),
         ('Categoria mais vendida por Ano', AE9)

@@ -29,7 +29,7 @@ kindle_data, books = LoadDatabases()
 def Topics():
     return [
        ('Autores e avaliações', RC1),
-       ('Classificando Avaliações', RC2),
+       ('Classificando Avaliações', RC2)
     ]
 
 def RC1():

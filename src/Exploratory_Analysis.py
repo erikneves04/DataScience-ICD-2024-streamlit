@@ -30,6 +30,7 @@ def AE3():
 
 def AE4():
    PlotImage('AE4.png')
+   PlotJustifyText("As vendas apresentam picos sazonais significativos, particularmente em setembro. Embora os BestSellers contribuam com uma pequena porcentagem das vendas totais, sua importância cresce durante esses meses de pico, como evidenciado em setembro. Uma possível causa para o aumento das vendas nesse período é a realização de eventos literários ou campanhas promocionais.")
 
 def AE5():     
     PlotImage('AE5.png')

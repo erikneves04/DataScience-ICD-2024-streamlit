@@ -71,8 +71,25 @@ def RC3():
     
     PlotJustifyText('Acurácia: 0.9716010117452606')
 
+def REC4():
+    PlotJustifyText('Para termos outro algoritmo de análise, vamos usar Árvores de Decisão e reforçar nossa análise')
+    PlotImage('RC4_1.png')
+    
+    PlotJustifyText('Na análise acima,agora é possível observar que o número de Reviews, Preço e Estrelas são variáveis que influenciam em um livro ser o BS. Além dessas, isKindleUnlimited e algumas categorias também tem uma importância bem pequena. Podemos ver nossa matriz de confusão para ver se essa análise pode ser levada a sério. Mas, logicamente falando, as 3 primeiras realmente devem ter um fator importante, como visto nos testes de hipótese, no livro ganhar o prêmio ou não.')
+    PlotImage('RC4_2.png')
+    
+    PlotJustifyText('Nossa matriz de confusão agora captura um pouco melhor os BS e os NBS. Assim, podemos ver que realmente Reviews, Preço e Estrelas influenciam em um livro ser BestSeller ou não.')
+    
+    PlotImage('RC4_3.png')
+    PlotImage('RC4_4.png')
 
+    PlotJustifyText('Analisando acima, a aréa sobre a curva é igual a 0.56. Isso diz que o modelo é apenas um pouco melhor que um chute aleatório. Porém, esta análise seria muito simplista, visto que, como foi dito, existem muito mais "False" na coluna IsBestSeller, do que "True". Então o modelo se confunde, acreditando ser um overfiting.')
+    PlotJustifyText('Profundidade da árvore: 51')
+    PlotJustifyText('Número de folhas: 3414')
+    PlotJustifyText('Acurácia média com validação cruzada: 0.7704022614685575')
 
+    PlotJustifyText('Agora, quando olhamos o número de folhas e a profundidada, pode parecer alto, mas o Database é extretamamente extenso. Logo, embora um número bem alto de folhas indique overtifing, esse pode não ser o caso. Para isso, fazemos a validação cruzada e vemos que a acuracia média se aproxima de 0.77, o que é um número razoável: o modelo não está "decorando" os dados (já que a acurácia média não é extremamente alta), mas sim aprendendo (já que a acurácia média é maior que 0.5, isto é, melhor que um chute aleatório).')
+    PlotImage('RC4_5.png')
 
-
-    PlotJustifyText("O modelo mostrou-se eficaz na predição das avaliações dos livros, explicando 83,86% da variância (R2) e apresentando um erro quadrático médio (MSE) de 0,0896. Esses resultados indicam que o modelo consegue prever as avaliações com precisão, justificando sua adequação para este tipo de análise.")
+    PlotJustifyText('Os intervalos de confiança (ICs), variando de 0,920 a 0,9845, representam a faixa de valores em que a acurácia real do modelo de regressão logística está, com 95% de confiança. Em outras palavras, se o processo de amostragem e treinamento do modelo fossem repetido várias vezes, espera-se que a acurácia do modelo caia dentro desse intervalo em 95% das vezes.')
+    PlotJustifyText('Isso indica que o modelo tem uma performance consistente e alta, com acurácias que, na maioria das vezes, estão acima de 98%, e pode alcançar até 98,45% em algumas iterações.')

@@ -5,8 +5,7 @@ from streamlit_option_menu import option_menu
 from utils import PlotTitle, PlotJustifyText
 from Exploratory_Analysis import Topics as ExploratoryAnalysisTopics
 from Hypothesis_Tests import Topics as HypothesisTestsTopics
-from Regression import Topics as RegressionTopics
-from Classification import Topics as ClassificationTopics
+from Regression_And_Classification import Topics as RegressionAndClassificationTopics
 
 with st.sidebar:
   selected = option_menu(
@@ -33,14 +32,8 @@ elif selected == "Testes de Hipótese":
       with st.expander(topic[0]):
           topic[1]()
 
-elif selected == "Regressão":
-  PlotJustifyText("Nesta seção, temos como objetivo aplicar modelos de regressão para prever valores numéricos contínuos. A partir dessa análise, buscamos extrair informações dos conjuntos de dados e hipóteses abordados previamente.")
-  for topic in RegressionTopics():
-      with st.expander(topic[0]):
-          topic[1]()
-
-elif selected == "Classificação":
-  PlotJustifyText("Nesta seção, aplicaremos modelos de classificação para categorizar dados em classes distintas. Esta abordagem permitirá a extração de informações valiosas com base nas características dos dados estudados.")
-  for topic in ClassificationTopics():
+elif selected == "Regressão e Classificação":
+  PlotJustifyText("Nesse notebook temos como objetivo aplicar modelos de regressão para prever valores numéricos contínuos e modelos de classificação para categorizar dados em classes distintas. E, apartir dessa análise, extrair informações dos conjuntos de dados e hipóteses abordados previamente.")
+  for topic in RegressionAndClassificationTopics():
       with st.expander(topic[0]):
           topic[1]()

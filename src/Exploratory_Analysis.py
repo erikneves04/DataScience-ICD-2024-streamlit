@@ -56,3 +56,4 @@ def AE8():
 
 def AE9():
     PlotImage('AE9.png')
+    PlotJustifyText("No início dos anos 2000, a categoria 'Computers & Technology' liderou as vendas, refletindo o boom da tecnologia e o crescente interesse público nesse setor. A partir de 2017, os livros da categoria 'Law' dominaram o mercado, apesar dos elevados preços, que variam entre cerca de 45 a 60 dólares. Esse volume pode ser atribuído à legislações que obrigam instituições a adquirirem livros sobre temas como impostos e governança à medida que novas leis são implementadas.")

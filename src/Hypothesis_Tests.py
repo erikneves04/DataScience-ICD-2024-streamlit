@@ -4,7 +4,10 @@ def Topics():
     return [
         ('Como os autores influenciam a avaliação?', HT1),
         ('Como o preço influencia a avaliação?', HT2),
-        ('Impacto das avaliações na classificação "Best Seller"', HT3)
+        ('Impacto das avaliações na classificação "Best Seller"', HT3),
+        ('Como o número de estrelas influencia no fato de ser um BestSeller', HT4),
+        ('Como o fato de ser "IsKindleUnlimited" influencia no fato de um livro ser Best Seller', HT5),
+        ('A categoria influencia em um livro ser Best Seller?', HT6),        
     ]
 
 def HT1():
@@ -39,3 +42,39 @@ def HT3():
     PlotImage('HT3.png')
 
     PlotJustifyText("A nossa estatística observável de 0.0894 encontra-se dentro do intervalo de confiança. Portanto, o acaso explica a diferença entre o número médio de estrelas. Sendo assim, não rejeitamos a hipótese nula e podemos afirmar que o número médio de estrelas não afeta o fato de um livro ser um best seller.")
+    
+def HT4():
+    PlotJustifyText("Vamos denotar a média de estrelas de best sellers por $E_m^{BS}$, e a média de estrelas de não best sellers por $E_m^{NBS}$. Portanto, podemos definir nossas hipóteses como:")
+    
+    PlotJustifyText("<b>Hipótese nula:</b> A média de estrelas de um best seller não é estatisticamente diferente da média de estrelas de um não best seller.")
+    PlotJustifyText("<b>Hipótese alternativa:</b> Existe relação significativa entre a avaliação de um best seller e a avaliação de um não best seller.")
+    
+    PlotJustifyText('Estatística observável 0.089406')
+    
+    PlotImage('HT4.png')
+    
+    PlotMarkdown('Quartis inferior e superior 95%: [0.073348, 0.105047]')
+    PlotMarkdown('Intervalo de confiança 95%: [0.089357, 0.089672]')
+    
+    PlotJustifyText("A nossa estatística observável de 0.0894 encontra-se dentro do intervalo de confiança. Portanto, o acaso explica a diferença entre o número médio de estrelas. Sendo assim, não rejeitamos a hipótese nula e podemos afirmar que o número médio de estrelas não afeta o fato de um livro ser um best seller.")
+    
+def HT5():   
+    PlotJustifyText("<b>Hipótese nula:</b> Não há diferença na proporção de Best Sellers entre livros que fazem parte do Kindle Unlimited e aqueles que não fazem parte. Isso significa que a diferença média observada no bootstrapping (D = 0) é devido ao acaso.")
+    PlotJustifyText("<b>Hipótese alternativa:</b> Há uma diferença na proporção de Best Sellers entre livros que fazem parte do Kindle Unlimited e aqueles que não fazem parte. Isso significa que a diferença média observada no bootstrapping (D ≠ 0) não é apenas devido ao acaso.")
+        
+    PlotImage('HT5.png')
+    
+    PlotMarkdown('Quantis 2.5% e 97.5%: [0.0308654935155852, 0.035217891848341835]')
+    PlotMarkdown('Intervalo de Confiança: [0.03287641063436545, 0.03301593857822303]')
+    PlotMarkdown('Estatística Observável = 0.0329796434937253')
+    
+    PlotJustifyText("Dado que o intervalo de confiança (0.03280, 0.03320) não inclui zero e é relativamente estreito, podemos concluir que há evidências estatisticamente significativas que sugerem que fazer parte do Kindle Unlimited aumenta a chance de um livro se tornar um bestseller. A estatística observável (est_obs) de 0.03298 indica que os livros do Kindle Unlimited têm cerca de 3,3% mais probabilidade de serem bestsellers em comparação com os livros que não são do Kindle Unlimited, e essa diferença é estatisticamente significativa.")
+    
+def HT6():
+    PlotJustifyText("<b>Hipótese nula:</b> Não há diferença significativa no número de Best Sellers entre as diferentes categorias. Ou seja, a diferença observada entre o valor nos dados reais e o valor nos dados simulados é atribuível ao acaso. Se o valor observado nos dados reais estiver dentro do intervalo de valores gerados pelos dados simulados, aceitamos a hipótese nula, indicando que a categoria não influencia significativamente na probabilidade de um livro ser um Best Seller.")
+    PlotJustifyText("<b>Hipótese alternativa:</b> Há uma diferença significativa no número de Best Sellers entre as diferentes categorias. Ou seja, a diferença entre o valor observado nos dados reais e o valor nos dados simulados não é atribuível ao acaso, indicando que a categoria tem uma influência significativa na probabilidade de um livro ser um Best Seller.")
+        
+    PlotImage('HT6.png')
+    PlotImage('HT7.png')
+      
+    PlotJustifyText("Com os testes de permutação, tornamos aleatório a categoria de um livro ser Best Seller ou não, assumindo apenas que essas váriaveis fazem parte da análise para ser BestSeller. Com isso após cada permutação, é feita uma contagem de BestSellers por categoria e é subtraído o valor observado origal e armazenado em uma matriz. Feito isso, plotamos os histogramas com os valores simulados primeiras categorias mais frequentes. Como é possível observar, as diferenças entre os valores não estão centrados em 0, ou seja, nos dados atuais, a categoria influência ser um Best Seller, ja que a quantia de Best Sellers continua a mesma, o que muda é a aleatoriedade de uma categoria ser Best Seller ou não.")

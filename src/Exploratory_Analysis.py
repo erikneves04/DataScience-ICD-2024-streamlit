@@ -28,7 +28,6 @@ def AE3():
     PlotJustifyText('Média das Estrelas dos Best Sellers: 4.49')    
     PlotJustifyText("Com base no gráfico e na estatística observada, livros que são Best Seller tem entre 4 e 5 estrelas, com média de aproximadamente 4,5 estrelas. Isso não é estranho, visto que a próprio conceito de 'BestSeller' carrega essa característica de ter uma avaliação boa, de modo geral.")
 
-
 def AE4():
    PlotImage('AE4.png')
 
@@ -54,7 +53,6 @@ def AE8():
     PlotJustifyText("Nesse tópico buscamos entender se existe uma relação entre ser Best Seller e Kindle Unlimited. Para analisar agregaremos todos os Best Sellers e checar a frequência que pertence ao Kindle Unlimited.")
     PlotImage('AE8.png')
     PlotJustifyText("A observação de que a maioria dos livros Best Seller é Kindle Unlimited sugere uma possível influência do programa Kindle Unlimited (KU) nos rankings de best sellers da Amazon. Isso pode indicar que o algoritmo da Amazon favorece ou dá maior visibilidade a livros que fazem parte desse programa.")
-
 
 def AE9():
     PlotImage('AE9.png')

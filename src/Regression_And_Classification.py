@@ -94,3 +94,16 @@ def R4():
 
     PlotJustifyText('Os intervalos de confiança (ICs), variando de 0,920 a 0,9845, representam a faixa de valores em que a acurácia real do modelo de regressão logística está, com 95% de confiança. Em outras palavras, se o processo de amostragem e treinamento do modelo fossem repetido várias vezes, espera-se que a acurácia do modelo caia dentro desse intervalo em 95% das vezes.')
     PlotJustifyText('Isso indica que o modelo tem uma performance consistente e alta, com acurácias que, na maioria das vezes, estão acima de 98%, e pode alcançar até 98,45% em algumas iterações.')
+
+def R5():
+    PlotJustifyText('Para inferir se um livro terá uma avaliação alta (4 ou mais estrelas), treinamos um modelo de classificação usando variáveis como preço, número de avaliações, editora e categoria. Inicialmente tratamos e dividimos os dados em conjuntos de treino e teste e, na sequência, ajustamos o modelo com Random Forest.')
+    
+    PlotJustifyText('Acurácia do modelo: 0.9487')
+    PlotImage('R5_1.png')
+
+    PlotJustifyText('O modelo de Random Forest alcançou uma alta acurácia de 94%, indicando um bom desempenho geral. No entanto, ao analisar as métricas detalhadas, percebe-se que o modelo tem um desempenho significativamente melhor em prever avaliações altas (classe 1) com uma precisão de 96% e recall de 99%, enquanto o desempenho na classe de avaliações baixas (classe 0) é limitado, com uma precisão de 51% e recall de 24%. Isso sugere um desequilíbrio na capacidade do modelo de prever diferentes classes, possivelmente devido a um desbalanceamento nos dados.')
+
+    PlotJustifyText('Acurácia do modelo: 0.9520')
+    PlotImage('R5_2.png')
+
+    PlotJustifyText('Para fins de comparação, o mesmo conjunto de teste e treino foi usado com o modelo K-nearest Neighbors (KNN). Os resultados foram consistentes em apresentar uma precisão semelhante nos casos de avaliação alta (1), com altas métricas de precisão, recall e F1-score, enquanto o KNN tem um resultado ligeiramente melhor na classe das avaliações baixas (0), com valores de precisão maiores que o Random Forest')

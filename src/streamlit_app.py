@@ -10,7 +10,7 @@ from Regression_And_Classification import Topics as RegressionAndClassificationT
 with st.sidebar:
   selected = option_menu(
     menu_title="Menu Principal",
-    options=["Análise Exploratória", "Testes de Hipótese", "Regressão", "Classificação"],
+    options=["Análise Exploratória", "Testes de Hipótese", "Regressão e Classificação"],
     icons=["house", "book", "envelope"],
     menu_icon="book",
     default_index=0,

@@ -7,7 +7,7 @@ def Topics():
         ('Impacto das avaliações na classificação "Best Seller"', HT3),
         ('Como o número de estrelas influencia no fato de ser um BestSeller', HT4),
         ('Como o fato de ser "IsKindleUnlimited" influencia no fato de um livro ser Best Seller', HT5),
-        ('A categoria influencia em um livro ser Best Seller?', HT6),        
+        ('A categoria influencia em um livro ser Best Seller?', HT6)       
     ]
 
 def HT1():

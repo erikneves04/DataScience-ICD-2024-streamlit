@@ -137,6 +137,7 @@ def AE4():
     plt.show()
     PlotGraph(plt)
     plt.close()
+    PlotJustifyText('As vendas apresentam picos sazonais significativos, particularmente no mês 9. Embora os BestSellers contribuam com uma pequena porcentagem das vendas, sua importância aumenta em meses de pico, como evidenciado em setembro.')
 
 def AE5():
     # Filtrando dados

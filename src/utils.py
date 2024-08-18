@@ -12,15 +12,3 @@ def PlotMarkdown(text: str):
 def PlotImage(image: str):
   path = f'img/{image}'
   st.image(path, use_column_width=True)
-
-def PlotImages(image1, image2):
-    path1 = f'img/{image1}'
-    path2 = f'img/{image2}'
-
-    col1, col2 = st.columns(2)
-
-    with col1:
-        st.image(path1, use_column_width=True)
-    
-    with col2:
-        st.image(path2, use_column_width=True)
